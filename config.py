@@ -12,8 +12,8 @@ CHANNEL_USERNAME = os.getenv('CHANNEL_USERNAME')
 
 
 PROFILES = {
-    'DEFAULT_PROFILE': "Дефолтный профиль"
-    'junior_profile' : "junior profile"
+    'DEFAULT_PROFILE': "Дефолтный профиль",
+    'junior_profile' : "junior profile",
 }
 
 

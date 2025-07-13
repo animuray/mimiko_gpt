@@ -52,7 +52,7 @@ class Database:
         # Функция для обновления выбранного профиля
         self.execute("UPDATE Users SET current_profile_key = ? WHERE user_id = ?", (profile_key, user_id), commit=True)
 
-
+    
     def user_input_data(self, user_id: int, user_input_len: int):
         """Функция для сохранения кол-ва введенных символов от пользователя"""
         current_data = self.execute(f'SELECT user_input_data FROM Users WHERE user_id = {user_id}', fetchone=True)
@@ -75,38 +75,18 @@ class Database:
         context_json = json.dumps(context_data, ensure_ascii=False, indent=None)
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
             
-        self.execute("UPDATE Users SET context_history = ?, last_context_update = ? WHERE user_id = ?",(context_json, timestamp, user_id),commit=True)
+        self.execute("UPDATE Users SET context_history = ?, last_context_update = ? WHERE user_id = ?",(context_json, timestamp, user_id), commit=True)
 
 
     def get_user_context(self, user_id: int) -> list:
-        """
-        Получает контекст пользователя, включая системный промпт выбранного профиля.
-        """
+        """Получает контекст пользователя, включая системный промпт выбранного профиля."""
         # Сперва получаем информацию о пользователе, чтобы узнать его текущий профиль
-        user_data = self.execute(
-            "SELECT current_profile_key, context_history FROM Users WHERE user_id = ?",
-            (user_id,),
-            fetchone=True
-        )
-
-        if not user_data:
-            # Если пользователя нет в базе (что маловероятно, если он уже использовал /start),
-            # добавляем его и возвращаем дефолтный контекст.
-            logging.warning(f"DB: User {user_id} not found in get_user_context. Adding and returning default.")
-            self.add_user(user_id, f"User_{user_id}")
-            user_data = self.execute(
-                "SELECT current_profile_key, context_history FROM Users WHERE user_id = ?",
-                (user_id,),
-                fetchone=True
-            )
-            if not user_data: # Чрезвычайный случай, если и после добавления не найдено
-                return [{"role": "system", "content": "An error occurred fetching profile settings."}]
-
+        user_data = self.execute("SELECT current_profile_key, context_history FROM Users WHERE user_id = ?", (user_id,), fetchone=True)
         current_profile_key, context_history_json = user_data
 
         # Если текущий ключ профиля отсутствует или некорректен, переключаемся на профиль по умолчанию
         if not current_profile_key or current_profile_key not in config.PROFILES:
-            current_profile_key = config.DEFAULT_PROFILE_KEY
+            current_profile_key = config.PROFILES["DEFAULT_PROFILE"]
             # Опционально: обновить базу, если ключ был некорректен
             self.update_user_profile_key(user_id, current_profile_key)
 

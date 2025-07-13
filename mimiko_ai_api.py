@@ -11,7 +11,7 @@ from database import Database
 db = Database('db.db')
 
 mimiko_ai_api_router = Router()
-
+print(mimiko_ai_api_router)
 async def query_deepseek_api(user_id: int, user_query: str, model="google/gemini-2.0-flash-001", temperature: float=0.6) -> str:
     url = config.API_ENDPOINT
     headers = {"Authorization": f"Bearer {config.AI_TOKEN}",

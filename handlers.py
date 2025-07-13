@@ -63,8 +63,7 @@ async def cmd_reset(message: types.Message):
 
 @handler_router.message(Command("role"))
 async def cmd_role(message: types.Message):
-    text = db.get_user_context(764567038)
-    print(text)
+    pass
 
 @handler_router.message(Command("limits"))
 async def cmd_limits(message: types.Message):

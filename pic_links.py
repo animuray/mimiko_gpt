@@ -2,5 +2,4 @@ fons = {'bg_start': 'https://sun1-56.userapi.com/s/v1/if2/S-Kdi-Ru0Ks6Hez3Z7PeME
         
         }
 
-import aiogram
-print(aiogram.__version__)
+
