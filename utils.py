@@ -1,4 +1,3 @@
-# utils.py
 from typing import List
 
 def split_text(text: str, max_length: int = 4096) -> List[str]:
@@ -18,6 +17,6 @@ def split_text(text: str, max_length: int = 4096) -> List[str]:
 def escape_markdown(text: str) -> str:
     """Экранирует символы для Telegram MarkdownV2."""
     # Список символов для экранирования
-    escape_chars = r'_*[]()~`>#+-=|{}.!'
+    escape_chars = r'!_*[]()~`>#+-=|{}.'
     # Экранируем, добавляя \ перед каждым специальным символом
     return "".join(f"\\{char}" if char in escape_chars else char for char in text)

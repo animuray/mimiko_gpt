@@ -65,6 +65,17 @@ async def cmd_reset(message: types.Message):
     profile_name = config.PROFILES[current_profile_key]['name']
     await message.answer(f"♻️ Контекст для роли '{profile_name}' успешно сброшен. Начинаем с чистого листа!")
 
+@router.message(Command("limits"))
+async def cmd_lim(message: types.Message):
+    with open('text_ai.txt', 'r', encoding='utf-8') as f:
+        response = f.read()  # Читаем весь файл в одну строку
+
+        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
+        for char in special_chars:
+            response = response.replace(char, f'\\{char}')
+
+    await message.answer(response, parse_mode='MarkdownV2')
+
 @router.message(Command("role"))
 @router.message(F.text == "🎭 Сменить роль")
 async def cmd_role(message: types.Message):
