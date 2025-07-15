@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-AI_TOKEN = os.getenv('AI_TOKEN')
+AI_TOKEN = os.getenv('AIg_TOKEN')
 API_ENDPOINT = os.getenv('API_ENDPOINT')
 
 # Замените на реальные числовые ID администраторов бота
@@ -60,3 +60,7 @@ PROFILES = {
         "is_premium": False
     }
 }
+
+
+
+

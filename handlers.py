@@ -88,7 +88,7 @@ async def show_profile(message: types.Message):
         sub_end_date_str = user_info[4]
         try:
             sub_end_date = datetime.strptime(sub_end_date_str, "%Y-%m-%d %H:%M:%S")
-            status = f"💎 Премиум активен до {sub_end_date.strftime('%d.%m.%Y %H:%M')}"
+            status = f"💎 Премиум активен до {sub_end_date.strftime('%d.%m.%Y %H:%M:%S')}"
         except (ValueError, TypeError):
             status = "💎 Премиум активен (ошибка даты)"
     text = (f"👤 <b>Ваш профиль:</b>\n\n<b>ID:</b> <code>{user_info[0]}</code>\n<b>Текущая роль:</b> {profile_name}\n<b>Статус доступа:</b> {status}\n\nДля смены роли используйте кнопку «🎭 Сменить роль».")
@@ -259,6 +259,14 @@ async def handle_text_message(message: types.Message, bot: Bot):
     history.append({"role": "user", "content": message.text})
     history.append({"role": "assistant", "content": response_text})
     db.save_chat_history(user_id, current_profile_key, history)
+
+ 
+    # if current_profile_key == 'MIMIKO_PROGRAMMER':
+    #     pass
+    
+    # else:
+    #     pass
+    
     if len(response_text) > 4096:
         parts = split_text(response_text)
         for part in parts: await message.answer(escape_markdown(part), parse_mode="MarkdownV2")
