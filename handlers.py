@@ -11,7 +11,7 @@ import config
 import keyboards
 from database import Database
 from ai_api import query_gemini_api
-from utils import split_text, escape_markdown
+from utils import escape_markdown, split_messages
 
 # Инициализируем роутер и базу данных
 router = Router()
@@ -65,16 +65,22 @@ async def cmd_reset(message: types.Message):
     profile_name = config.PROFILES[current_profile_key]['name']
     await message.answer(f"♻️ Контекст для роли '{profile_name}' успешно сброшен. Начинаем с чистого листа!")
 
-@router.message(Command("limits"))
-async def cmd_lim(message: types.Message):
-    with open('text_ai.txt', 'r', encoding='utf-8') as f:
-        response = f.read()  # Читаем весь файл в одну строку
 
-        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
-        for char in special_chars:
-            response = response.replace(char, f'\\{char}')
 
-    await message.answer(response, parse_mode='MarkdownV2')
+
+# @router.message(Command("limits"))
+# async def cmd_lim(message: types.Message):
+#     with open('text_ai.txt', 'r', encoding='utf-8') as f:
+#         response = f.read()  # Читаем весь файл в одну строку
+
+#     # Разделяем и отправляем части
+#     for part in split_messages(response):
+#         await message.answer(
+#             text=part,
+#             parse_mode="MarkdownV2"
+#         )
+
+
 
 @router.message(Command("role"))
 @router.message(F.text == "🎭 Сменить роль")
@@ -278,9 +284,15 @@ async def handle_text_message(message: types.Message, bot: Bot):
     # else:
     #     pass
     
-    if len(response_text) > 4096:
-        parts = split_text(response_text)
-        for part in parts: await message.answer(escape_markdown(part), parse_mode="MarkdownV2")
-    else:
-        try: await message.answer(escape_markdown(response_text), parse_mode="MarkdownV2")
-        except Exception: await message.answer(response_text)
+    # if len(response_text) > 4096:
+    #     parts = split_text(response_text)
+    #     for part in parts: await message.answer(escape_markdown(part), parse_mode="MarkdownV2")
+    # else:
+    #     try: await message.answer(escape_markdown(response_text), parse_mode="MarkdownV2")
+    #     except Exception: await message.answer(response_text)
+
+    for part in split_messages(response_text):
+            await message.answer(
+            text=part,
+            parse_mode="MarkdownV2"
+        )

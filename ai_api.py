@@ -2,7 +2,7 @@ import requests
 import config
 from typing import List
 
-async def query_gemini_api(messages: List[dict], model="google/gemini-2.0-flash-001", temperature: float = 0.7) -> str:
+async def query_gemini_api(messages: List[dict], model="google/gemini-2.0-flash-001", temperature: float = 0.6) -> str:
     """
     Отправляет запрос к API и возвращает ответ.
     Принимает на вход готовый список сообщений.
